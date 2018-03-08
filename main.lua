@@ -11,7 +11,7 @@ local Map = require("map")
 local Camera = require("camera")
 
 cols, rows = 0, 0 --Column and row count for all mazes. Global. Probably doesn't need to be.
-w = 60 --Tile size. Side of a square. Global. '' '' '' 
+w = 25 --Tile size. Side of a square. Global. '' '' '' 
 local middle = {} --Holds the coordinates for the middle of the maze. Used for player starting location and calculating offsets.
 local mino --The Minotaur
 local camera
