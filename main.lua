@@ -1,9 +1,3 @@
---[[
-Project: Atone's Labyrinth
-
-Description: Random maze generation using depth first search with backtracking. Mazes are infinitely stitched together creating the mythical inescapable Labyrinth. You are a prisoner in this maze and must avoid the minotaur while seeking the exit. Avoid traps and collect artifacts along the way to protect yourself and defeat the dread-bull. Only when the monster is slain can freedom be found. Credit to Daniel Schiffman of The Coding Train whose YouTube videos exposed me to the maze generation algorithm. I highly recommend his content, he is the Bob Ross of programming. This game is a happy little tree.
-]]--
-
 local Minotaur = require("minotaur")
 local Player = require("player")
 local Game = require("game")
