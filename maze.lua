@@ -4,17 +4,8 @@ local entity = require("entity")
 
 local Maze = {} --A randomly generated maze composed of cells
 
-local function update(self)
-  for y = 0, rows - 1 do
-    for x = 0, cols - 1 do
-      self.grid[y][x].mvisited = false
-    end
-  end
-end
-
-
-local function draw(self, x, y)
-  love.graphics.draw(self.canvas, 0 , 0) --Draw the maze which was printed to a canvas when it was generated. 
+local function draw(self, x, y) --Draw the maze and the entities in it
+  love.graphics.draw(self.canvas, 0 , 0)
   for i = 0, rows -1 do
     for j = 0, cols - 1 do 
       if self.entities[i][j] then

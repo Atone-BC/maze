@@ -2,7 +2,7 @@ local Player = {}
 local list = require("list")
 local maze = require("maze")
 
-local function lerp(a, b, t)
+local function lerp(a, b, t) --Linear interpolation
   return a * (1-t) + (b*t)
 end
 
@@ -12,7 +12,7 @@ local function draw(self)
   love.graphics.setColor(255,255,255)
 end
 
-local function update(self, dt)
+local function update(self, dt) --Updates player's movement timer, draw position, and checks for collisions with the minotaur
   if self.game.mino.maze == self.game.map[0][0] and self.game.mino.trapped <= 0 and self.x == self.game.mino.x and self.y == self.game.mino.y then
     if self.items.sword and (self.game.mino.trapped > 0 or self.items.shield or self.items.helm) then
       print("Victory!")
@@ -30,8 +30,7 @@ local function update(self, dt)
     if self.timer  > 1.5 then
       self.trapped = false
     end
-  end
-  if not self.move then
+  elseif not self.move then
     self.timer = self.timer + dt
     if self.timer > 0.05 then
       self.move = true
@@ -42,7 +41,7 @@ local function update(self, dt)
   self.drawy = lerp( self.drawy, self.y, 0.2)
 end
 
-local function keypressed(self, key)
+local function keypressed(self, key) --Player movement
   if self.move and not self.trapped then
     if key == "up" then
       if self.y > 0 then
@@ -102,6 +101,7 @@ local function keypressed(self, key)
       end
     end
   end
+  --Check if we moved onto an entity.
   local ent = self.game.map[0][0].entities[self.y][self.x]
   if ent then
     if ent.id == "trap" then
