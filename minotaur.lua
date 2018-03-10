@@ -14,40 +14,33 @@ local function draw(self)
   end
 end
 
-
 local function findPath(self)
-  --Adapted version of the maze generation algorithm to find a path to the player. Because these are "perfect" mazes, there is exactly one path from one point to any other point. So we can kinda just brute force it.
-  local current = self.maze.grid[self.y][self.x] --initial cell is minotaur's location
-  
-  while current do --Is this necessary? There should always be a current. Think about and maybe rewrite this later.
+  --Adapted version of the maze generation algorithm to find a path to the player or the maze exit. We'd like to rework this to be able to path across mazes or at least be wiser about what direction the player is in.
+  local current = self.maze.grid[self.y][self.x]
+  while current do
     current.mvisited = true
-    if current == self.goal then self.trail:push(current) break end --When the current cell is the goal, break the loop. The remaining trail is the path from goal to minotaur.
-    
-    local new = current:checkPath() --Find a neighbor without a wall between
-    if new then --If there's an open neighbor
-      self.trail:push(current) --push the chosen cell to the stack
-      current = new --chosen cell becomes current cell, start again.
-    else --if no open neighbors
-      current = self.trail:pop() --backtrack
+    if current == self.goal then self.path:push(current) break end 
+    local new = current:checkPath()
+    if new then
+      self.path:push(current)
+      current = new
+    else
+      current = self.path:pop()
     end
   end
-  
-  for i = 1, self.trail.length do -- Trail is path from goal -> mino. Pop it all into a new stack, reversing the order so it's a path from mino -> goal.
-    self.path:push(self.trail:pop()) -- We should rewrite this to skip this step now that we're using dequeues for our stacks.
-  end
-
-  
+  self.path:popleft()
 end
 
 local function update(self)
   local player = self.game.player
   local map = self.game.map
-  if self.maze == map[0][0] then --If in the same maze as the player, the player is the goal.
+  if self.maze == map[0][0] then
     self.goal = map[0][0].grid[player.y][player.x]
-  else -- Else the exit is the goal
+  else
     self.goal = self.maze.exit 
   end
-  if self.x == self.goal.x and self.y == self.goal.y and self.maze ~= map[0][0] then --we're on the goal
+  --Moving the minotaur from one maze to another.
+  if self.x == self.goal.x and self.y == self.goal.y and self.maze ~= map[0][0] then
     local exitDirection = game.player.roomTrail:popleft()
     if exitDirection == "up" then
       self.maze = game.player.roomTrail:popleft()
@@ -62,17 +55,15 @@ local function update(self)
       self.maze = game.player.roomTrail:popleft()
       self.x = 0
     end
-  else -- We're not on the goal
-  self:findPath() --Get a path
-  self.path:pop() --Pop the current position off the path, should probably change findPath to do this for us.
-  local step = self.path:pop() --Pop the next step along the path.
-  if step then -- Take that step
-    self.x = step.x
-    self.y = step.y
+  else --get path and take a step along it.
+    self:findPath()
+    local step = self.path:popleft()
+    if step then
+      self.x = step.x
+      self.y = step.y
+    end
   end
-
-  end
-  self.path = list.create() --clear the path, we're getting a new one next time.
+  self.path = list.create()
   for y = 0, rows - 1 do
     for x = 0, cols - 1 do
       self.maze.grid[y][x].mvisited = false
@@ -94,7 +85,6 @@ function Minotaur.create(x, y, maze)
   inst.y = y
   inst.maze = maze
   inst.goal = inst.maze.grid[0][0]
-  inst.trail = list.create()
   inst.path = list.create()
   inst.findPath = findPath
   inst.update = update
