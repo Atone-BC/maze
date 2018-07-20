@@ -3,12 +3,12 @@ local Minotaur = {} -- The minotaur is a hostile NPC that chases the player thro
 local list = require("list")
 
 local function draw(self)
-  for y = -1, 1 do 
+  for y = -1, 1 do
     for x = -1, 1 do
       if self.game.map[y][x] == self.maze then
-        love.graphics.setColor(255,0,0)
+        love.graphics.setColor(1,0,0)
         love.graphics.rectangle("fill", ((self.x * w) + 5) +  (love.graphics.getWidth() * x), ((self.y * w)+ 5) +  (love.graphics.getHeight()) * y, w-10, w-10)
-        love.graphics.setColor(255,255,255)
+        love.graphics.setColor(1,1,1)
       end
     end
   end
@@ -19,7 +19,7 @@ local function findPath(self)
   local current = self.maze.grid[self.y][self.x]
   while current do
     current.mvisited = true
-    if current == self.goal then self.path:push(current) break end 
+    if current == self.goal then self.path:push(current) break end
     local new = current:checkPath()
     if new then
       self.path:push(current)
@@ -37,7 +37,7 @@ local function update(self)
   if self.maze == map[0][0] then
     self.goal = map[0][0].grid[player.y][player.x]
   else
-    self.goal = self.maze.exit 
+    self.goal = self.maze.exit
   end
   --Moving the minotaur from one maze to another.
   if self.x == self.goal.x and self.y == self.goal.y and self.maze ~= map[0][0] then
@@ -50,7 +50,7 @@ local function update(self)
       self.y = 0
     elseif exitDirection == "left" then
       self.maze = game.player.roomTrail:popleft()
-      self.x = cols - 1 
+      self.x = cols - 1
     elseif exitDirection == "right" then
       self.maze = game.player.roomTrail:popleft()
       self.x = 0
@@ -69,14 +69,14 @@ local function update(self)
       self.maze.grid[y][x].mvisited = false
     end
   end
-  
+
   if self.maze.entities[self.y][self.x] then
     if self.maze.entities[self.y][self.x] and self.maze.entities[self.y][self.x].id == "trap" then
       self.trapped = 3
     end
     self.maze.entities[self.y][self.x] = nil
   end
-  
+
 end
 
 function Minotaur.create(x, y, maze)

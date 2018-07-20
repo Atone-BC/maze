@@ -7,9 +7,9 @@ local function lerp(a, b, t) --Linear interpolation
 end
 
 local function draw(self)
-  love.graphics.setColor(255,0,0)
+  love.graphics.setColor(1,0,0)
   love.graphics.rectangle("fill", ((self.drawx * w) + 5), ((self.drawy * w)+ 5), w-10, w-10)
-  love.graphics.setColor(255,255,255)
+  love.graphics.setColor(1,1,1)
 end
 
 local function update(self, dt) --Updates player's movement timer, draw position, and checks for collisions with the minotaur
@@ -57,7 +57,7 @@ local function keypressed(self, key) --Player movement
         self.drawy = self.drawy + rows
       end
     end
-    
+
     if key == "down" then
       if not self.game.map[0][0].grid[self.y][self.x].walls[2] then
         if self.y < rows - 1 then

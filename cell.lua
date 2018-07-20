@@ -3,9 +3,9 @@ local Cell = {} -- A cell is one of the squares within a maze. They have locatio
 
 local function draw(self)
   if self.visited then
-    love.graphics.setColor(65, 65, 65)
+    love.graphics.setColor(0.25, 0.25, 0.25)
     love.graphics.rectangle("fill", self.x * w, self. y * w, w, w)
-    love.graphics.setColor(255,255,255)
+    love.graphics.setColor(1,1,1)
   end
   love.graphics.setLineWidth(2)
   if self.walls[1] then
@@ -22,7 +22,7 @@ local function checkPath(self) --We could probably merge this with checkNeighbor
   local right = self.grid[self.y][self.x + 1]
   local bottom = self.grid[self.y + 1][self.x]
   local left = self.grid[self.y][self.x - 1]
-  
+
   if top and not top.mvisited and not top.walls[2] then
     table.insert(neighbors, top)
   end
@@ -41,7 +41,7 @@ local function checkPath(self) --We could probably merge this with checkNeighbor
   else
     return nil
   end
-  
+
 end
 
 
@@ -51,23 +51,23 @@ local function checkNeighbors(self) -- Used in maze generation. Checks neighbori
   local right = self.grid[self.y][self.x + 1]
   local bottom = self.grid[self.y + 1][self.x]
   local left = self.grid[self.y][self.x - 1]
-  
+
   if top and not top.visited then --If the neighbor exists and has not been visited, add it to the table.
     table.insert(neighbors, top)
   end
-  
+
   if right and not right.visited then
     table.insert(neighbors, right)
   end
-  
+
   if bottom and not bottom.visited then
     table.insert(neighbors, bottom)
   end
-  
+
   if left and not left.visited then
     table.insert(neighbors, left)
   end
-  
+
   if #neighbors > 0 then
     local r = love.math.random(#neighbors)
     return neighbors[r] --Returns a random unvisitied neighbor or nil.
