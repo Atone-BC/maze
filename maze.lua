@@ -1,13 +1,13 @@
 local cell = require("cell")
-local list = require("list")
+local List = require("list")
 local entity = require("entity")
 
 local Maze = {} --A randomly generated maze composed of cells
 
 local function draw(self, x, y) --Draw the maze and the entities in it
   love.graphics.draw(self.canvas, 0 , 0)
-  for i = 0, rows -1 do
-    for j = 0, cols - 1 do 
+  for i = 0, ROWS -1 do
+    for j = 0, COLS - 1 do
       if self.entities[i][j] then
         self.entities[i][j]:draw(0, 0)
       end
@@ -31,7 +31,7 @@ local function removeWalls(a, b) -- Removes the walls between cells a and b, use
   if y == -1 then
     a.walls[2] = false
   end
-end  
+end
 
 
 function Maze.create()
@@ -40,30 +40,30 @@ function Maze.create()
   inst.mt = {} --metatable for grid
   inst.mt.__index = function (t, k) return {} end --This might be a little hack-y. This is so that when we call grid[y][x] with an invalid y, we get nil rather than an error.
   setmetatable(inst.grid, inst.mt)
-  inst.trail = list.create() 
+  inst.trail = List.create()
   inst.current = {}
   inst.entities = {}
   inst.removeWalls = removeWalls
   inst.draw = draw
   inst.exit = {}
   inst.update = update
-  
-  for y = 0, rows - 1  do --initializing the grid of cells and entities.
+
+  for y = 0, ROWS - 1  do --initializing the grid of cells and entities.
     inst.grid[y] = {}
     inst.entities[y] = {}
-    for x = 0, cols - 1  do
-      inst.grid[y][x] = cell.create(x, y, inst.grid)
+    for x = 0, COLS - 1  do
+      inst.grid[y][x] = cell.create(x, y, inst.grid, w)
     end
   end
-  
+
   for i = 1, 3 do
-    local randx = love.math.random(cols) - 1
-    local randy = love.math.random(rows) - 1
+    local randx = love.math.random(COLS) - 1
+    local randy = love.math.random(ROWS) - 1
     inst.entities[randy][randx] = entity.create(6, randx, randy)
   end
-  
+
   --Maze generation algorithm starts here. We are implementing the algorithm found here: https://en.wikipedia.org/wiki/Maze_generation_algorithm#Recursive_backtracker
-  
+
   inst.current = inst.grid[0][0] --Make a cell the current cell. We're chosing top left. Could easily be random or the player spawn location.
   local deadend = 0
   while inst.current do -- As long as there's a current cell
@@ -84,21 +84,21 @@ function Maze.create()
   end
  -- inst.grid._et[index(cols-1, love.math.random(rows-1))].walls[1] = false --These two lines remove a random wall on the right and bottom of the maze so that it can open into other mazes.
  -- inst.grid._et[index(love.math.random(cols-1), rows-1)].walls[2]= false
-  inst.grid[love.math.random(rows - 1)][cols - 1].walls[1] = false
-  inst.grid[rows - 1][love.math.random(cols - 1)].walls[2] = false
-  
+  inst.grid[love.math.random(ROWS - 1)][COLS - 1].walls[1] = false
+  inst.grid[ROWS - 1][love.math.random(COLS - 1)].walls[2] = false
+
   inst.canvas = love.graphics.newCanvas(love.graphics.getWidth(), love.graphics.getHeight()) --Create a canvas and draw the maze to the canvas to make the maze easy to draw later.
   love.graphics.setCanvas(inst.canvas)
   love.graphics.push()
   love.graphics.origin()
-    for y = 0, rows - 1 do
-      for x = 0, cols - 1 do
+    for y = 0, ROWS - 1 do
+      for x = 0, COLS - 1 do
         inst.grid[y][x]:draw()
       end
     end
   love.graphics.pop()
   love.graphics.setCanvas()
-    
+
   return inst
 end
 

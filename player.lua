@@ -1,6 +1,5 @@
 local Player = {}
-local list = require("list")
-local maze = require("maze")
+local List = require("list")
 
 local function lerp(a, b, t) --Linear interpolation
   return a * (1-t) + (b*t)
@@ -8,7 +7,7 @@ end
 
 local function draw(self)
   love.graphics.setColor(1,0,0)
-  love.graphics.rectangle("fill", ((self.drawx * w) + 5), ((self.drawy * w)+ 5), w-10, w-10)
+  love.graphics.rectangle("fill", ((self.drawx * W) + 5), ((self.drawy * W)+ 5), W-10, W-10)
   love.graphics.setColor(1,1,1)
 end
 
@@ -49,18 +48,18 @@ local function keypressed(self, key) --Player movement
         self.y = self.y  - 1
         self.move = false
         end
-      elseif not self.game.map[-1][0].grid[rows - 1][self.x].walls[2] then
+      elseif not self.game.map[-1][0].grid[ROWS - 1][self.x].walls[2] then
         self.game.map[0][0].exit = self.game.map[0][0].grid[self.y][self.x]
         self.game.map:update("up")
-        self.y = rows - 1
+        self.y = ROWS - 1
         self.move = false
-        self.drawy = self.drawy + rows
+        self.drawy = self.drawy + ROWS
       end
     end
 
     if key == "down" then
       if not self.game.map[0][0].grid[self.y][self.x].walls[2] then
-        if self.y < rows - 1 then
+        if self.y < ROWS - 1 then
           self.y = self.y  + 1
           self.move = false
         else
@@ -68,7 +67,7 @@ local function keypressed(self, key) --Player movement
           self.game.map:update("down")
           self.y = 0
           self.move = false
-          self.drawy = self.drawy - rows
+          self.drawy = self.drawy - ROWS
         end
       end
     end
@@ -78,17 +77,17 @@ local function keypressed(self, key) --Player movement
           self.x = self.x - 1
           self.move = false
         end
-      elseif not self.game.map[0][-1].grid[self.y][cols - 1].walls[1] then
+      elseif not self.game.map[0][-1].grid[self.y][COLS - 1].walls[1] then
         self.game.map[0][0].exit = self.game.map[0][0].grid[self.y][self.x]
         self.game.map:update("left")
-        self.x = cols - 1
+        self.x = COLS - 1
         self.move = false
-        self.drawx = self.drawx + cols
+        self.drawx = self.drawx + COLS
       end
     end
     if key == "right" then
       if not self.game.map[0][0].grid[self.y][self.x].walls[1] then
-        if self.x < cols - 1 then
+        if self.x < COLS - 1 then
           self.x = self.x + 1
           self.move = false
         else
@@ -96,7 +95,7 @@ local function keypressed(self, key) --Player movement
           self.game.map:update("right")
           self.x = 0
           self.move = false
-          self.drawx = self.drawx - cols
+          self.drawx = self.drawx - COLS
         end
       end
     end
@@ -122,7 +121,7 @@ function Player.create(x, y)
   inst.drawx = x
   inst.drawy = y
   inst.move = true
-  inst.roomTrail = list.create()
+  inst.roomTrail = List.create()
   inst.draw = draw
   inst.keypressed = keypressed
   inst.update = update

@@ -2,7 +2,7 @@ local Entity = {} -- An unmoving object in the maze that does something when pla
 
 local function draw(self, x, y)
   love.graphics.setColor(unpack(self.color))
-  love.graphics.rectangle("fill", ((self.x * w) + 5) + x, ((self.y * w)+ 5) + y, w-10, w-10)
+  love.graphics.rectangle("fill", ((self.x * W) + 5) + x, ((self.y * W)+ 5) + y, W-10, W-10)
   love.graphics.setColor(1,1,1)
 end
 

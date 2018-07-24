@@ -10,8 +10,18 @@ local function draw(self) --Offsets subsequent draws
 end
 
 local function update(self)
-  self.x = lerp( self.x or (self.game.middle.x - self.game.player.x) * w, (self.game.middle.x - self.game.player.x) * w, self.speed) --Lerp between current offset and new offset for smooth camera.
-  self.y = lerp( self.y or (self.game.middle.y - self.game.player.y) * w, (self.game.middle.y - self.game.player.y) * w, self.speed)
+    self.x = self.x or (self.game.middle.x - self.game.player.x) * W
+    self.y = self.y or (self.game.middle.y - self.game.player.y) * W
+
+    if self.x > ((self.game.middle.x - self.game.player.x) * W) + 5
+    or self.x < ((self.game.middle.x - self.game.player.x) * W) - 5
+    or self.y > ((self.game.middle.y - self.game.player.y) * W) + 5
+    or self.y < ((self.game.middle.y - self.game.player.y) * W) - 5
+    then
+      self.x = lerp( self.x, (self.game.middle.x - self.game.player.x) * W, self.speed) --Lerp between current offset and new offset for smooth camera.
+      self.y = lerp( self.y, (self.game.middle.y - self.game.player.y) * W, self.speed)
+    end
+
 end
 
 function Camera.create()

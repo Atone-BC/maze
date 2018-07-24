@@ -1,18 +1,18 @@
-local Cell = {} -- A cell is one of the squares within a maze. They have location, walls, and methods for examining neighboring cells.
+local Cell = {} -- A cell is one square of the grid that comprises a maze. They have location, walls, and methods for examining neighboring cells.
 
 
 local function draw(self)
-  if self.visited then
+--  if self.visited then
     love.graphics.setColor(0.25, 0.25, 0.25)
-    love.graphics.rectangle("fill", self.x * w, self. y * w, w, w)
+    love.graphics.rectangle("fill", self.x * W, self. y * W, W, W)
     love.graphics.setColor(1,1,1)
-  end
+--  end
   love.graphics.setLineWidth(2)
   if self.walls[1] then
-    love.graphics.line(self.x * w + w, self.y * w, self.x * w + w, self.y * w + w) --right
+    love.graphics.line(self.x * W + W, self.y * W, self.x * W + W, self.y * W + W) --right
   end
   if self.walls[2] then
-    love.graphics.line(self.x * w, self.y * w + w, self.x * w + w, self.y * w + w) -- bottom
+    love.graphics.line(self.x * W, self.y * W + W, self.x * W + W, self.y * W + W) -- bottom
   end
 end
 

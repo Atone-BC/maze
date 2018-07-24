@@ -27,7 +27,7 @@ local function update(self, dir) --called when the player moves from one maze to
     end
     self.game.player.roomTrail:push("up")
     self.game.player.roomTrail:push(self[0][0])
-    self.game.camera.y = self.game.camera.y - (rows * w)
+    self.game.camera.y = self.game.camera.y - (ROWS * W)
   elseif dir == "down" then
     for y = -1, 1 do
       for x = -1, 1 do
@@ -40,11 +40,11 @@ local function update(self, dir) --called when the player moves from one maze to
     end
     self.game.player.roomTrail:push("down")
     self.game.player.roomTrail:push(self[0][0])
-    self.game.camera.y = self.game.camera.y + (rows * w)
+    self.game.camera.y = self.game.camera.y + (ROWS * W)
   elseif dir == "left" then
     for x = 1, -1, -1 do
       for y = -1, 1 do
-        if self[y][x-1] then 
+        if self[y][x-1] then
           self[y][x] = self[y][x-1]
         else
           self[y][x] = maze.create()
@@ -53,7 +53,7 @@ local function update(self, dir) --called when the player moves from one maze to
     end
     self.game.player.roomTrail:push("left")
     self.game.player.roomTrail:push(self[0][0])
-    self.game.camera.x = self.game.camera.x - (cols * w)
+    self.game.camera.x = self.game.camera.x - (COLS * W)
   elseif dir == "right" then
     for x = -1, 1 do
       for y = -1, 1 do
@@ -66,7 +66,7 @@ local function update(self, dir) --called when the player moves from one maze to
     end
     self.game.player.roomTrail:push("right")
     self.game.player.roomTrail:push(self[0][0])
-    self.game.camera.x = self.game.camera.x + (cols * w)
+    self.game.camera.x = self.game.camera.x + (COLS * W)
   end
 end
 

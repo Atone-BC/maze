@@ -1,13 +1,13 @@
 local Minotaur = {} -- The minotaur is a hostile NPC that chases the player through the labyrinth.
 
-local list = require("list")
+local List = require("list")
 
 local function draw(self)
   for y = -1, 1 do
     for x = -1, 1 do
       if self.game.map[y][x] == self.maze then
         love.graphics.setColor(1,0,0)
-        love.graphics.rectangle("fill", ((self.x * w) + 5) +  (love.graphics.getWidth() * x), ((self.y * w)+ 5) +  (love.graphics.getHeight()) * y, w-10, w-10)
+        love.graphics.rectangle("fill", ((self.x * W) + 5) +  (love.graphics.getWidth() * x), ((self.y * W)+ 5) +  (love.graphics.getHeight()) * y, W-10, W-10)
         love.graphics.setColor(1,1,1)
       end
     end
@@ -41,18 +41,18 @@ local function update(self)
   end
   --Moving the minotaur from one maze to another.
   if self.x == self.goal.x and self.y == self.goal.y and self.maze ~= map[0][0] then
-    local exitDirection = game.player.roomTrail:popleft()
+    local exitDirection = self.game.player.roomTrail:popleft()
     if exitDirection == "up" then
-      self.maze = game.player.roomTrail:popleft()
-      self.y = rows - 1
+      self.maze = self.game.player.roomTrail:popleft()
+      self.y = ROWS - 1
     elseif exitDirection == "down" then
-      self.maze = game.player.roomTrail:popleft()
+      self.maze = self.game.player.roomTrail:popleft()
       self.y = 0
     elseif exitDirection == "left" then
-      self.maze = game.player.roomTrail:popleft()
-      self.x = cols - 1
+      self.maze = self.game.player.roomTrail:popleft()
+      self.x = COLS - 1
     elseif exitDirection == "right" then
-      self.maze = game.player.roomTrail:popleft()
+      self.maze = self.game.player.roomTrail:popleft()
       self.x = 0
     end
   else --get path and take a step along it.
@@ -63,9 +63,9 @@ local function update(self)
       self.y = step.y
     end
   end
-  self.path = list.create()
-  for y = 0, rows - 1 do
-    for x = 0, cols - 1 do
+  self.path = List.create()
+  for y = 0, ROWS - 1 do
+    for x = 0, COLS - 1 do
       self.maze.grid[y][x].mvisited = false
     end
   end
@@ -85,7 +85,7 @@ function Minotaur.create(x, y, maze)
   inst.y = y
   inst.maze = maze
   inst.goal = inst.maze.grid[0][0]
-  inst.path = list.create()
+  inst.path = List.create()
   inst.findPath = findPath
   inst.update = update
   inst.draw = draw
