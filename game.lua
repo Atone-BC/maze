@@ -1,9 +1,10 @@
-local Game = {} --Gamestate object giving everything easy reference to everything else in the game world. Also hiding away some update code from cluttering main.lua
 local List = require("list")
 local Map = require("map")
 local Camera = require("camera")
 local Minotaur = require("minotaur")
 local Player = require("player")
+
+local Game = {} --Gamestate object containing all objects in the game world.
 
 local timer = 0
 
@@ -12,6 +13,9 @@ local function lerp(a, b, t)
 end
 
 local function update(self, dt)
+  self.player:update(dt)
+  self.camera:update()
+
   timer = timer + dt
   if timer > 0.5 then
     timer = 0
@@ -21,11 +25,6 @@ local function update(self, dt)
       self.mino.trapped = self.mino.trapped - 1
     end
   end
-
-  self.player:update(dt)
-  self.camera:update()
-
-  if self.mino.maze == self.map[0][0] then self.player.roomTrail = List.create() end
 end
 
 local function draw(self)
@@ -45,7 +44,7 @@ function Game.create()
   inst.update = update
   inst.draw = draw
 
-  for k, v in pairs(inst) do
+  for k, v in pairs(inst) do --give all objects in the game reference to the game state.
     if type(v) == "table" then
       v.game = inst
     end

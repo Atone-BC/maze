@@ -1,5 +1,7 @@
-local Map = {} --The map is a 3x3 grid of mazes which comprise the game world.
 local maze = require("maze")
+
+local Map = {} --The map is a 3x3 grid of mazes which comprise the game world.
+
 
 local function draw(self) --For each maze in the grid, checks if it is onscreen then draws it at the appropriate offset.
   for y = -1, 1 do
@@ -14,7 +16,7 @@ local function draw(self) --For each maze in the grid, checks if it is onscreen 
   end
 end
 
-local function update(self, dir) --called when the player moves from one maze to another. Shifts everything over in the 3x3 grid of mazes, dropping 3 mazes on one end and creating 3 mazes on the opposite.
+local function update(self, dir) --called when the player moves from one maze to another. Shifts everything over in the 3x3 grid of mazes, dropping 3 mazes on one end and creating 3 mazes on the other.
   if dir == "up" then
     for y = 1, -1, -1 do
       for x = -1, 1 do

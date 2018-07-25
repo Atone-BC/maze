@@ -2,7 +2,7 @@ local Game = require("game")
 local game
 
 function love.load()
-  W = 25
+  W = 25 --The side length of the squares in the maze
   COLS, ROWS = math.floor(love.graphics.getWidth() / W), math.floor(love.graphics.getHeight() / W)
   game = Game.create()
 end
@@ -17,8 +17,4 @@ end
 
 function love.keypressed(key)
   game.player:keypressed(key)
-
-  if key == 'space' then
-    print(game.camera.x, game.camera.y)
-  end
 end

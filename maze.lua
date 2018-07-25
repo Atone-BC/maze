@@ -33,6 +33,44 @@ local function removeWalls(a, b) -- Removes the walls between cells a and b, use
   end
 end
 
+local function generateMaze(self)  --We are implementing the algorithm found here: https://en.wikipedia.org/wiki/Maze_generation_algorithm#Recursive_backtracker
+    self.current = self.grid[0][0] --Make a cell the current cell. We're chosing top left. Could easily be random or the player spawn location.
+    local deadend = 0
+    while self.current do -- As long as there's a current cell
+      self.current.visited = true -- Mark current cell as visited.
+      local new = self.current:checkNeighbors() -- Examine the current cell's neighbors for an unvisited cell.
+      if new then -- If there is an unvisited neighbor
+        deadend = 0
+        self.trail:push(self.current) --Push the current cell to the stack
+        self.removeWalls(self.current, new) --Remove the wall between the current cell and the chosen cell
+        self.current = new -- The chosen cell becomes the current cell, go back to the start of the while loop.
+      else --There are no unvisited neigbors.
+        if deadend == 0 then
+          deadend = 1
+          if love.math.random(2) == 1 then self.entities[self.current.y][self.current.x] = entity.create(love.math.random(5), self.current.x, self.current.y) end
+        end
+        self.current = self.trail:pop() --Pop a cell from the stack and make it the current cell. This is the backtracking element. Go back til we get a cell with unvisited neighbors or the maze is complete.
+      end
+    end
+   -- self.grid._et[index(cols-1, love.math.random(rows-1))].walls[1] = false --These two lines remove a random wall on the right and bottom of the maze so that it can open into other mazes.
+   -- self.grid._et[index(love.math.random(cols-1), rows-1)].walls[2]= false
+    self.grid[love.math.random(ROWS - 1)][COLS - 1].walls[1] = false
+    self.grid[ROWS - 1][love.math.random(COLS - 1)].walls[2] = false
+
+    self.canvas = love.graphics.newCanvas(love.graphics.getWidth(), love.graphics.getHeight()) --Create a canvas and draw the maze to the canvas to make the maze easy to draw later.
+    love.graphics.setCanvas(self.canvas)
+    love.graphics.push()
+    love.graphics.origin()
+      for y = 0, ROWS - 1 do
+        for x = 0, COLS - 1 do
+          self.grid[y][x]:draw()
+        end
+      end
+    love.graphics.pop()
+    love.graphics.setCanvas()
+
+end
+
 
 function Maze.create()
   inst = {}
@@ -56,53 +94,15 @@ function Maze.create()
     end
   end
 
-  for i = 1, 3 do
+  for i = 1, 3 do --place some random traps
     local randx = love.math.random(COLS) - 1
     local randy = love.math.random(ROWS) - 1
     inst.entities[randy][randx] = entity.create(6, randx, randy)
   end
 
-  --Maze generation algorithm starts here. We are implementing the algorithm found here: https://en.wikipedia.org/wiki/Maze_generation_algorithm#Recursive_backtracker
-
-  inst.current = inst.grid[0][0] --Make a cell the current cell. We're chosing top left. Could easily be random or the player spawn location.
-  local deadend = 0
-  while inst.current do -- As long as there's a current cell
-    inst.current.visited = true -- Mark current cell as visited.
-    local new = inst.current:checkNeighbors() -- Examine the current cell's neighbors for an unvisited cell.
-    if new then -- If there is an unvisited neighbor
-      deadend = 0
-      inst.trail:push(inst.current) --Push the current cell to the stack
-      inst.removeWalls(inst.current, new) --Remove the wall between the current cell and the chosen cell
-      inst.current = new -- The chosen cell becomes the current cell, go back to the start of the while loop.
-    else --There are no unvisited neigbors.
-      if deadend == 0 then
-        deadend = 1
-        if love.math.random(2) == 1 then inst.entities[inst.current.y][inst.current.x] = entity.create(love.math.random(5), inst.current.x, inst.current.y) end
-      end
-      inst.current = inst.trail:pop() --Pop a cell from the stack and make it the current cell. This is the backtracking element. Go back til we get a cell with unvisited neighbors or the maze is complete.
-    end
-  end
- -- inst.grid._et[index(cols-1, love.math.random(rows-1))].walls[1] = false --These two lines remove a random wall on the right and bottom of the maze so that it can open into other mazes.
- -- inst.grid._et[index(love.math.random(cols-1), rows-1)].walls[2]= false
-  inst.grid[love.math.random(ROWS - 1)][COLS - 1].walls[1] = false
-  inst.grid[ROWS - 1][love.math.random(COLS - 1)].walls[2] = false
-
-  inst.canvas = love.graphics.newCanvas(love.graphics.getWidth(), love.graphics.getHeight()) --Create a canvas and draw the maze to the canvas to make the maze easy to draw later.
-  love.graphics.setCanvas(inst.canvas)
-  love.graphics.push()
-  love.graphics.origin()
-    for y = 0, ROWS - 1 do
-      for x = 0, COLS - 1 do
-        inst.grid[y][x]:draw()
-      end
-    end
-  love.graphics.pop()
-  love.graphics.setCanvas()
+  generateMaze(inst)
 
   return inst
 end
-
-
-
 
 return Maze

@@ -1,6 +1,6 @@
-local Minotaur = {} -- The minotaur is a hostile NPC that chases the player through the labyrinth.
-
 local List = require("list")
+
+local Minotaur = {} -- The minotaur is a hostile NPC that chases the player through the labyrinth.
 
 local function draw(self)
   for y = -1, 1 do
@@ -16,6 +16,7 @@ end
 
 local function findPath(self)
   --Adapted version of the maze generation algorithm to find a path to the player or the maze exit. We'd like to rework this to be able to path across mazes or at least be wiser about what direction the player is in.
+  self.path = List.create()
   local current = self.maze.grid[self.y][self.x]
   while current do
     current.mvisited = true
@@ -63,7 +64,6 @@ local function update(self)
       self.y = step.y
     end
   end
-  self.path = List.create()
   for y = 0, ROWS - 1 do
     for x = 0, COLS - 1 do
       self.maze.grid[y][x].mvisited = false
@@ -77,6 +77,8 @@ local function update(self)
     self.maze.entities[self.y][self.x] = nil
   end
 
+  if self.maze == self.game.map[0][0] then self.game.player.roomTrail = List.create() end
+
 end
 
 function Minotaur.create(x, y, maze)
@@ -85,7 +87,7 @@ function Minotaur.create(x, y, maze)
   inst.y = y
   inst.maze = maze
   inst.goal = inst.maze.grid[0][0]
-  inst.path = List.create()
+  inst.path = nil
   inst.findPath = findPath
   inst.update = update
   inst.draw = draw

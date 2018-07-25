@@ -1,5 +1,6 @@
-local Player = {}
 local List = require("list")
+
+local Player = {} --The player object that the user pilots through the maze.
 
 local function lerp(a, b, t) --Linear interpolation
   return a * (1-t) + (b*t)
