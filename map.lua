@@ -23,7 +23,7 @@ local function update(self, dir) --called when the player moves from one maze to
         if self[y-1] then
           self[y][x] = self[y-1][x]
         else
-          self[y][x] = maze.create()
+          self[y][x] = maze.create(self.game)
         end
       end
     end
@@ -36,7 +36,7 @@ local function update(self, dir) --called when the player moves from one maze to
         if self[y+1] then
           self[y][x] = self[y+1][x]
         else
-          self[y][x] = maze.create()
+          self[y][x] = maze.create(self.game)
         end
       end
     end
@@ -49,7 +49,7 @@ local function update(self, dir) --called when the player moves from one maze to
         if self[y][x-1] then
           self[y][x] = self[y][x-1]
         else
-          self[y][x] = maze.create()
+          self[y][x] = maze.create(self.game)
         end
       end
     end
@@ -62,7 +62,7 @@ local function update(self, dir) --called when the player moves from one maze to
         if self[y][x+1] then
           self[y][x] = self[y][x+1]
         else
-          self[y][x] = maze.create()
+          self[y][x] = maze.create(self.game)
         end
       end
     end
@@ -72,17 +72,17 @@ local function update(self, dir) --called when the player moves from one maze to
   end
 end
 
-function Map.create()
+function Map.create(game)
   local inst = {}
     for y = -1, 1 do
     inst[y] = {}
     for x = -1, 1 do
-      inst[y][x] = maze.create()
+      inst[y][x] = maze.create(game)
     end
   end
   inst.draw = draw
   inst.update = update
-  inst.game = nil
+  inst.game = game
   return inst
 end
 

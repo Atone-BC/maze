@@ -1,14 +1,12 @@
 local List = require("list")
+local lerp = require("lerp")
 
 local Player = {} --The player object that the user pilots through the maze.
 
-local function lerp(a, b, t) --Linear interpolation
-  return a * (1-t) + (b*t)
-end
-
 local function draw(self)
   love.graphics.setColor(1,0,0)
-  love.graphics.rectangle("fill", ((self.drawx * W) + 5), ((self.drawy * W)+ 5), W-10, W-10)
+--  love.graphics.rectangle("fill", ((self.drawx * W) + 5), ((self.drawy * W)+ 5), W-10, W-10)
+  love.graphics.draw(self.sprite, self.drawx * W, self.drawy * W)
   love.graphics.setColor(1,1,1)
 end
 
@@ -115,7 +113,7 @@ local function keypressed(self, key) --Player movement
 end
 
 
-function Player.create(x, y)
+function Player.create(x, y, game)
   local inst = {}
   inst.x = x
   inst.y = y
@@ -129,7 +127,11 @@ function Player.create(x, y)
   inst.timer = 0
   inst.trapped = false
   inst.items = {}
-  inst.game = nil
+  inst.game = game
+  inst.sprite = game.sprites.player
+
+
+
   return inst
 end
 

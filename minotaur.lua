@@ -7,7 +7,8 @@ local function draw(self)
     for x = -1, 1 do
       if self.game.map[y][x] == self.maze then
         love.graphics.setColor(1,0,0)
-        love.graphics.rectangle("fill", ((self.x * W) + 5) +  (love.graphics.getWidth() * x), ((self.y * W)+ 5) +  (love.graphics.getHeight()) * y, W-10, W-10)
+      --  love.graphics.rectangle("fill", ((self.x * W) + 5) +  (love.graphics.getWidth() * x), ((self.y * W)+ 5) +  (love.graphics.getHeight()) * y, W-10, W-10)
+        love.graphics.draw (self.sprite, (self.x * W) + (love.graphics.getWidth() * x), (self.y * W) + (love.graphics.getHeight() * y) )
         love.graphics.setColor(1,1,1)
       end
     end
@@ -15,7 +16,8 @@ local function draw(self)
 end
 
 local function findPath(self)
-  --Adapted version of the maze generation algorithm to find a path to the player or the maze exit. We'd like to rework this to be able to path across mazes or at least be wiser about what direction the player is in.
+  --Pathfinding with depth first search. Because mazes are considered "perfect", this gets an optimal solution within a maze.
+  --May update with A* or Dijkstra or something to be smarter about chasing across multiple mazes.
   self.path = List.create()
   local current = self.maze.grid[self.y][self.x]
   while current do
@@ -81,7 +83,7 @@ local function update(self)
 
 end
 
-function Minotaur.create(x, y, maze)
+function Minotaur.create(x, y, maze, game)
   local inst = {}
   inst.x = x
   inst.y = y
@@ -92,7 +94,8 @@ function Minotaur.create(x, y, maze)
   inst.update = update
   inst.draw = draw
   inst.trapped = 0
-  inst.game = nil
+  inst.game = game
+  inst.sprite = game.sprites.mino
   return inst
 end
 

@@ -1,5 +1,5 @@
 local cell = require("cell")
-local List = require("list")
+local list = require("list")
 local entity = require("entity")
 
 local Maze = {} --A randomly generated maze composed of cells
@@ -47,7 +47,7 @@ local function generateMaze(self)  --We are implementing the algorithm found her
       else --There are no unvisited neigbors.
         if deadend == 0 then
           deadend = 1
-          if love.math.random(2) == 1 then self.entities[self.current.y][self.current.x] = entity.create(love.math.random(5), self.current.x, self.current.y) end
+          if love.math.random(3) == 1 then self.entities[self.current.y][self.current.x] = entity.create(love.math.random(5), self.current.x, self.current.y, self.game) end
         end
         self.current = self.trail:pop() --Pop a cell from the stack and make it the current cell. This is the backtracking element. Go back til we get a cell with unvisited neighbors or the maze is complete.
       end
@@ -72,19 +72,19 @@ local function generateMaze(self)  --We are implementing the algorithm found her
 end
 
 
-function Maze.create()
+function Maze.create(game)
   inst = {}
   inst.grid = {} -- 2D array of cells, indices start at 0
   inst.mt = {} --metatable for grid
   inst.mt.__index = function (t, k) return {} end --This might be a little hack-y. This is so that when we call grid[y][x] with an invalid y, we get nil rather than an error.
   setmetatable(inst.grid, inst.mt)
-  inst.trail = List.create()
+  inst.trail = list.create()
   inst.current = {}
   inst.entities = {}
   inst.removeWalls = removeWalls
   inst.draw = draw
   inst.exit = {}
-  inst.update = update
+  inst.game = game
 
   for y = 0, ROWS - 1  do --initializing the grid of cells and entities.
     inst.grid[y] = {}
@@ -97,7 +97,7 @@ function Maze.create()
   for i = 1, 3 do --place some random traps
     local randx = love.math.random(COLS) - 1
     local randy = love.math.random(ROWS) - 1
-    inst.entities[randy][randx] = entity.create(6, randx, randy)
+    inst.entities[randy][randx] = entity.create(6, randx, randy, game)
   end
 
   generateMaze(inst)
