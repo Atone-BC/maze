@@ -5,20 +5,13 @@ Randomly generated mazes are infinitely stitched together to create the inescapa
 
 ## Items
 There are several objects in the game world that can be walked over to gain some effect.
-
-**Athena's Sheild** - Absorbs one hit from a trap or the minotaur. Stuns the minotaur on block.
-
-**Ariadne's Sword** - Allows the player to slay the stunned minotaur.
-
-**Daedalus' Wings** - Allows temporary flight over walls.
-
-**Helm of Hades** - Grants temporary invisibility and ability to pass through minotaur.
-
-**Hermes' Sandals** - Gives immunity to traps and possibly makes movement go to collision with wall instead of next tile.
-
-**Trap** - Stuns anyone who walks over it.
-
-**Ariadne's Thread** - Dropped by the slain minotaur, reveals path to exit.
+* **Athena's Sheild** - Absorbs one hit from a trap or the minotaur. Stuns the minotaur on block.
+* **Ariadne's Sword** - Allows the player to slay the stunned minotaur.
+* **Daedalus' Wings** - Allows temporary flight over walls.
+* **Helm of Hades** - Grants temporary invisibility and ability to pass through minotaur.
+* **Hermes' Sandals** - Gives immunity to traps and possibly makes movement go to collision with wall instead of next tile.
+* **Trap** - Stuns anyone who walks over it.
+* **Ariadne's Thread** - Dropped by the slain minotaur, reveals path to exit.
 
 ## Credits
 Some credit is due to Daniel Schiffman of The Coding Train YouTube channel, whose videos on maze generation served as a jumping-off point for this game. He produces entertaining, educational content and I highly recommend his channel to aspiring programmers. This project began as a 1:1 love port of the maze generator made in this video: https://www.youtube.com/watch?v=HyK_Q5rrcr4
