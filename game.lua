@@ -10,8 +10,8 @@ local timer = 0
 local function update(self, dt)
   self.player:update(dt)
   self.camera:update()
-
-  timer = timer + dt
+  self.mino:update(dt)
+--[[  timer = timer + dt
   if timer > 0.3 then
     timer = 0
     if self.mino.trapped <= 0 then
@@ -19,7 +19,7 @@ local function update(self, dt)
     else
       self.mino.trapped = self.mino.trapped - 1
     end
-  end
+  end --]]
 end
 
 local function draw(self)
@@ -43,7 +43,6 @@ function Game.create()
     mino = love.graphics.newImage('assets/brute.png')
   }
 
-
   inst.middle = {x = math.floor((COLS-1)/2), y = math.floor((ROWS-1)/2) }
   inst.map = Map.create(inst)
   inst.player = Player.create(inst.middle.x, inst.middle.y, inst)
@@ -51,10 +50,7 @@ function Game.create()
   inst.camera = Camera.create(inst)
   inst.update = update
   inst.draw = draw
-
-
   return inst
-
 
 end
 

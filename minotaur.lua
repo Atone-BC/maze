@@ -34,7 +34,20 @@ local function findPath(self)
   self.path:popleft()
 end
 
-local function update(self)
+local timer = 0
+local function update(self, dt) -- Should we update the minotaur?
+  timer = timer + dt
+  if timer > self.speed then
+    timer = 0
+    if self.trapped <= 0 then
+      self:update2()
+    else
+      self.trapped = self.trapped - 1
+    end
+  end
+end
+
+local function update2(self) -- Actually update the minotaur.
   local player = self.game.player
   local map = self.game.map
   if self.maze == map[0][0] then
@@ -91,9 +104,11 @@ function Minotaur.create(x, y, maze, game)
   inst.goal = inst.maze.grid[0][0]
   inst.path = nil
   inst.findPath = findPath
-  inst.update = update
+  inst.update = update -- Should we step?
+  inst.update2 = update2 -- Step
   inst.draw = draw
-  inst.trapped = 0
+  inst.trapped = 0 -- How many steps the minotaur is trapped for
+  inst.speed = 0.3 -- Minotaur steps every this many seconds
   inst.game = game
   inst.sprite = game.sprites.mino
   return inst
