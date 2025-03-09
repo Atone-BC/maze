@@ -16,5 +16,5 @@ function love.draw()
 end
 
 function love.keypressed(key)
-  game.player:keypressed(key)
+  game:keypressed(key)
 end
