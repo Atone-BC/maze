@@ -8,9 +8,9 @@ local Game = {} --Gamestate object containing all objects in the game world.
 local timer = 0
 
 local function update(self, dt)
+  self.camera:update()
   if not self.paused then
     self.player:update(dt)
-    self.camera:update()
     self.mino:update(dt)
   end
 end
